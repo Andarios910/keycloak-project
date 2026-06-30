@@ -1,0 +1,77 @@
+version: "3.8"
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KC_MAIL_HOST: smtp.gmail.com
+      KC_MAIL_PORT: 587
+      KC_MAIL_FROM: "your@gmail.com"
+      KC_MAIL_AUTH: "false"
+      KC_MAIL_USER: "your@gmail.com"
+      KC_MAIL_PASSWORD: "your-app-password"
+      KC_MAIL_STARTTLS: "false"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - start-dev
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+# version: '3.8'
+# services:
+#   keycloak:
+#     image: quay.io/keycloak/keycloak:latest
+#     environment:
+#       KEYCLOAK_ADMIN: admin
+#       KEYCLOAK_ADMIN_PASSWORD: admin
+#       KC_DB: postgres
+#       KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+#       KC_DB_USERNAME: keycloak
+#       KC_DB_PASSWORD: password
+#       KC_MAIL_HOST: smtp.gmail.com
+#       KC_MAIL_PORT: 587
+#       KC_MAIL_FROM: "your email"
+#       KC_MAIL_AUTH: true
+#       KC_MAIL_USER: "your email"
+#       KC_MAIL_PASSWORD: "your password'
+#       KC_MAIL_STARTTLS: true
+#     ports:
+#       - "8080:8080"
+#     depends_on:
+#       - db
+#     command:
+#       - start-dev
+#   db:
+#     image: postgres:latest
+#     environment:
+#       POSTGRES_DB: keycloak
+#       POSTGRES_USER: keycloak
+#       POSTGRES_PASSWORD: password
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:
