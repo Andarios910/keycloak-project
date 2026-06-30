@@ -3,8 +3,8 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://db:5432/keycloak
       KC_DB_USERNAME: keycloak
@@ -16,6 +16,9 @@ services:
       KC_MAIL_USER: "your@gmail.com"
       KC_MAIL_PASSWORD: "your-app-password"
       KC_MAIL_STARTTLS: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: "xforwarded"
     ports:
       - "9090:8080"
     depends_on:
