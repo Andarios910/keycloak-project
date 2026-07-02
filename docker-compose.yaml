@@ -2,6 +2,8 @@ version: "3.8"
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
+    volumes:
+      - ./providers:/opt/keycloak/providers
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
